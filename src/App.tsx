@@ -1,4 +1,4 @@
-import type { SubmitEvent } from 'react';
+import { useState, type SubmitEvent } from 'react';
 
 interface Item {
   id: number;
@@ -28,22 +28,45 @@ function Logo() {
   return <h1>🏝️ Far Away 🧳</h1>;
 }
 function Form() {
+  const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState(1);
+
   function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
-    console.log(e);
+
+    if (!description) return;
+
+    const newItem: Item = {
+      id: Date.now(),
+      description,
+      quantity,
+      packed: false,
+    };
+    console.log(newItem);
+
+    setDescription('');
+    setQuantity(1);
   }
 
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your 😍 trip?</h3>
-      <select name="" id="">
+      <select
+        value={quantity}
+        onChange={e => setQuantity(Number.parseInt(e.target.value))}
+      >
         {Array.from({ length: 20 }, (_, i) => i + 1).map(num => (
           <option value={num} key={num}>
             {num}
           </option>
         ))}
       </select>
-      <input type="text" placeholder="Item...." />
+      <input
+        type="text"
+        placeholder="Item...."
+        value={description}
+        onChange={e => setDescription(e.target.value)}
+      />
       <button>ADD</button>
     </form>
   );
