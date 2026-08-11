@@ -25,11 +25,23 @@ function App() {
     setItems(items => items.filter(item => item.id !== id));
   }
 
+  function handleToggleItem(id: number) {
+    setItems(items =>
+      items.map(item =>
+        item.id === id ? { ...item, packed: !item.packed } : item,
+      ),
+    );
+  }
+
   return (
     <div className="app">
       <Logo />
       <Form onAddItems={handleAddItems} />
-      <PackingList items={items} onDeleteItem={handleDeleteItem} />
+      <PackingList
+        items={items}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+      />
       <Stats />
     </div>
   );
@@ -92,14 +104,20 @@ function Form({ onAddItems }: FormProps) {
 interface PackingListProps {
   items: Item[];
   onDeleteItem: (id: number) => void;
+  onToggleItem: (id: number) => void;
 }
 
-function PackingList({ items, onDeleteItem }: PackingListProps) {
+function PackingList({ items, onDeleteItem, onToggleItem }: PackingListProps) {
   return (
     <div className="list">
       <ul>
         {items.map(item => (
-          <Item item={item} key={item.id} onDeleteItem={onDeleteItem} />
+          <Item
+            item={item}
+            key={item.id}
+            onDeleteItem={onDeleteItem}
+            onToggleItem={onToggleItem}
+          />
         ))}
       </ul>
     </div>
@@ -109,11 +127,17 @@ function PackingList({ items, onDeleteItem }: PackingListProps) {
 interface ItemProps {
   item: Item;
   onDeleteItem: (id: number) => void;
+  onToggleItem: (id: number) => void;
 }
 
-function Item({ item, onDeleteItem }: ItemProps) {
+function Item({ item, onDeleteItem, onToggleItem }: ItemProps) {
   return (
     <li>
+      <input
+        type="checkbox"
+        checked={item.packed}
+        onChange={_ => onToggleItem(item.id)}
+      />
       <span className={item.packed ? 'packed' : ''}>
         {item.quantity}&nbsp;
         {item.description}
