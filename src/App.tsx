@@ -7,11 +7,12 @@ interface Item {
   packed: boolean;
 }
 
-const initialItems: Item[] = [
+/* const initialItems: Item[] = [
   { id: 1, description: 'Passports', quantity: 2, packed: false },
   { id: 2, description: 'Socks', quantity: 12, packed: false },
   { id: 3, description: 'Charger', quantity: 1, packed: true },
 ];
+ */
 
 function App() {
   const [items, setItems] = useState<Item[]>([]);
@@ -20,11 +21,15 @@ function App() {
     setItems(items => [...items, item]);
   }
 
+  function handleDeleteItem(id: number) {
+    setItems(items => items.filter(item => item.id !== id));
+  }
+
   return (
     <div className="app">
       <Logo />
       <Form onAddItems={handleAddItems} />
-      <PackingList items={items} />
+      <PackingList items={items} onDeleteItem={handleDeleteItem} />
       <Stats />
     </div>
   );
@@ -83,25 +88,37 @@ function Form({ onAddItems }: FormProps) {
     </form>
   );
 }
-function PackingList({ items }: { items: Item[] }) {
+
+interface PackingListProps {
+  items: Item[];
+  onDeleteItem: (id: number) => void;
+}
+
+function PackingList({ items, onDeleteItem }: PackingListProps) {
   return (
     <div className="list">
       <ul>
         {items.map(item => (
-          <Item item={item} key={item.id} />
+          <Item item={item} key={item.id} onDeleteItem={onDeleteItem} />
         ))}
       </ul>
     </div>
   );
 }
-function Item({ item }: { item: Item }) {
+
+interface ItemProps {
+  item: Item;
+  onDeleteItem: (id: number) => void;
+}
+
+function Item({ item, onDeleteItem }: ItemProps) {
   return (
     <li>
       <span className={item.packed ? 'packed' : ''}>
         {item.quantity}&nbsp;
         {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
