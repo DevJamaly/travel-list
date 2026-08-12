@@ -115,18 +115,24 @@ select {
 }
 
 .list {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: var(--space-base);
   overflow-y: auto;
-  padding-block: var(--space-base);
+  padding-top: var(--space-base);
   color: var(--clr-text-light);
   background-color: var(--clr-base);
 }
 
 .list ul {
+  flex-grow: 1;
+  align-items: flex-start;
   list-style: none;
   width: 80%;
   margin-inline: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-auto-rows: 50px;
   gap: 1rem;
   font-size: var(--fs-list);
   font-weight: var(--fw-list);
@@ -186,4 +192,11 @@ select {
 
 .packed {
   text-decoration: line-through;
+}
+
+.actions {
+  position: sticky;
+  bottom: 0;
+  padding-block: var(--space-base);
+  background-color: var(--clr-base);
 }
