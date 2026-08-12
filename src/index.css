@@ -195,6 +195,9 @@ select {
 }
 
 .actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-base);
   position: sticky;
   bottom: 0;
   padding-block: var(--space-base);

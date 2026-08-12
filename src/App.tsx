@@ -33,6 +33,15 @@ function App() {
     );
   }
 
+  function handleClearList() {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete all items ?',
+    );
+    if (!confirmed) return;
+
+    setItems([]);
+  }
+
   return (
     <div className="app">
       <Logo />
@@ -41,6 +50,7 @@ function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        onClearList={handleClearList}
       />
       <Stats items={items} />
     </div>
@@ -105,9 +115,15 @@ interface PackingListProps {
   items: Item[];
   onDeleteItem: (id: number) => void;
   onToggleItem: (id: number) => void;
+  onClearList: () => void;
 }
 
-function PackingList({ items, onDeleteItem, onToggleItem }: PackingListProps) {
+function PackingList({
+  items,
+  onDeleteItem,
+  onToggleItem,
+  onClearList,
+}: PackingListProps) {
   const [sortBy, setSortby] = useState('input');
 
   let sortedItems = items;
@@ -136,6 +152,7 @@ function PackingList({ items, onDeleteItem, onToggleItem }: PackingListProps) {
           <option value="description">Sort by description</option>
           <option value="packed">Sort by packed status</option>
         </select>
+        <button onClick={onClearList}>Clear list</button>
       </div>
     </div>
   );
